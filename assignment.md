@@ -2,4 +2,7 @@
    - implement the build() method
    - Handle all the validation scenarios.
      - Only 1 Bot
-     - No 2 players with same symbol
+2. Implement all controller methods
+3. Implement OrderOneGameWinningStrategy
+
+By Tuesday evening, I will update this repo with the final code.

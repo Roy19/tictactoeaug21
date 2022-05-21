@@ -1,9 +1,12 @@
 package com.scaler.tictactoe.controllers;
 
-import com.scaler.tictactoe.models.Game;
-import com.scaler.tictactoe.models.GameStatus;
-import com.scaler.tictactoe.models.Move;
-import com.scaler.tictactoe.models.Player;
+import com.scaler.tictactoe.factories.player.PlayerFactory;
+import com.scaler.tictactoe.models.*;
+import com.scaler.tictactoe.strategies.botplayingstrategies.RandomBotPlayingStrategy;
+import com.scaler.tictactoe.strategies.gamewinningstrategies.GameWinningStrategy;
+import com.scaler.tictactoe.strategies.gamewinningstrategies.OrderOneGameWinningStrategy;
+
+import java.util.List;
 
 // Start a game
 // Make a move
@@ -11,8 +14,22 @@ import com.scaler.tictactoe.models.Player;
 // CheckWinner
 // GetCurrentState
 public class GameController {
-    public Game createGame() {
-        return null;
+    public Game createGame(int dimensionOfBoard,
+                           List<Player> players,
+                           List<GameWinningStrategy> strategies) {
+        Game game = null;
+
+        try {
+            game = Game.create()
+                    .withBoard(new Board(dimensionOfBoard))
+                    .addPlayers(players)
+                    .addGameWinningStrategies(strategies)
+                    .build();
+        } catch (Exception exception) {
+            System.out.println("We did something wrong");
+        }
+
+        return game;
     }
 
     public MoveResult makeMove(Game game, Move move) {
@@ -20,7 +37,7 @@ public class GameController {
     }
 
     public boolean undo(Game game) {
-        return false;
+        return game.undo();
     }
 
     public Player getWinner(Game game) {

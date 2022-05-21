@@ -9,4 +9,8 @@ public class Board {
     public Board(int dimension) {
         this.dimension = dimension;
     }
+
+    Cell getCell(int i, int j) {
+        return board.get(i).get(j);
+    }
 }

@@ -1,5 +1,6 @@
 package com.scaler.tictactoe.models;
 
+import com.scaler.tictactoe.exceptions.EmptyMovesUndoOperationException;
 import com.scaler.tictactoe.exceptions.MultipleBotsException;
 import com.scaler.tictactoe.strategies.gamewinningstrategies.GameWinningStrategy;
 
@@ -17,6 +18,25 @@ public class Game {
 
     public static Builder create() {
         return new Builder();
+    }
+
+    // A B
+    // | |
+    // |
+    // 0 1 (2 % 2 = 0) 1 (2 % 2 = 0)
+    // 0 -> -1
+    public boolean undo() throws EmptyMovesUndoOperationException {
+        if (this.moves.size() == 0) {
+            // Handle Edge Case
+            throw new EmptyMovesUndoOperationException();
+        }
+        Move lastMove = this.moves.get(this.moves.size() - 1);
+        Cell relevantCell = lastMove.getCell();
+        relevantCell.clearCell();
+        this.lastMovedPlayerIndex -= 1;
+        this.lastMovedPlayerIndex = (this.lastMovedPlayerIndex + this.players.size()) % this.players.size();
+        this.moves.remove(relevantCell);
+        return true;
     }
 
     public static class Builder {
@@ -59,6 +79,11 @@ public class Game {
 
         public Builder addGameWinningStrategy(GameWinningStrategy strategy) {
             this.gameWinningStrategies.add(strategy);
+            return this;
+        }
+
+        public Builder addGameWinningStrategies(List<GameWinningStrategy> strategies) {
+            this.gameWinningStrategies.addAll(strategies);
             return this;
         }
 

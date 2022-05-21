@@ -4,32 +4,30 @@ import com.scaler.tictactoe.controllers.GameController;
 import com.scaler.tictactoe.factories.player.PlayerFactory;
 import com.scaler.tictactoe.models.*;
 import com.scaler.tictactoe.strategies.botplayingstrategies.RandomBotPlayingStrategy;
+import com.scaler.tictactoe.strategies.gamewinningstrategies.GameWinningStrategy;
 import com.scaler.tictactoe.strategies.gamewinningstrategies.OrderOneGameWinningStrategy;
+
+import java.util.List;
 
 public class Application {
     private static GameController gameController = new GameController();
 
     public static void main(String[] args) {
-        Game game;
+        List<Player> players1 = List.of(
+                PlayerFactory.getHuman(new Symbol('X'), new User()),
+                PlayerFactory.getBot(new Symbol('0'), new RandomBotPlayingStrategy())
+        );
 
-        try {
-            game = Game.create()
-                    .withBoard(new Board(3))
-                    .addPlayer(PlayerFactory.getHuman(new Symbol('X'), new User()))
-                    .addPlayer(PlayerFactory.getBot(new Symbol('0'), new RandomBotPlayingStrategy()))
-                    .addGameWinningStrategy(new OrderOneGameWinningStrategy())
-                    .build();
-        } catch (Exception exception) {
-            System.out.println("We did something wrong");
-        }
+        List<GameWinningStrategy> gameWinningStrategies1 = List.of(
+                new OrderOneGameWinningStrategy()
+        );
 
-        Game game1 = gameController.createGame();
-        Game game2 = gameController.createGame();
+        Game game1 = gameController.createGame(3, players1, gameWinningStrategies1);
 
         gameController.makeMove(game1, new Move());
 
-        // We get some input
-        // MOVE 1 2 X
+        // g2 move 1 2 X
+
 
     }
 
