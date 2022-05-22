@@ -5,6 +5,17 @@ public class Cell {
     private int column;
     private Symbol symbol;
 
+    public Cell(int row, int column) {
+        this.row = row;
+        this.column = column;
+    }
+
+    public Cell(int row, int col, Symbol symbol) {
+        this.row = row;
+        this.column = col;
+        this.symbol = symbol;
+    }
+
     public int getRow() {
         return row;
     }

@@ -1,6 +1,8 @@
 package com.scaler.tictactoe.models;
 
+import com.scaler.tictactoe.exceptions.EmptyGameWinningStrategiesException;
 import com.scaler.tictactoe.exceptions.EmptyMovesUndoOperationException;
+import com.scaler.tictactoe.exceptions.GameNotEndedException;
 import com.scaler.tictactoe.exceptions.MultipleBotsException;
 import com.scaler.tictactoe.strategies.gamewinningstrategies.GameWinningStrategy;
 
@@ -23,6 +25,8 @@ public class Game {
         this.gameWinningStrategies = gameWinningStrategies;
         this.moves = new ArrayList<>();
         this.lastMovedPlayerIndex = -1;
+        this.gameStatus = GameStatus.IN_PROGRESS;
+        this.winner = null;
     }
 
     public static Builder create() {
@@ -46,6 +50,37 @@ public class Game {
         this.lastMovedPlayerIndex = (this.lastMovedPlayerIndex + this.players.size()) % this.players.size();
         this.moves.remove(relevantCell);
         return true;
+    }
+
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public List<Move> getMoves() {
+        return this.moves;
+    }
+
+    public void setWinner(Player player) {
+        this.winner = player;
+    }
+
+    public void setGameStatus(GameStatus status) {
+        this.gameStatus = status;
+    }
+
+    public GameWinningStrategy getGameWinningStrategy() {
+        return this.gameWinningStrategies.get(0);
+    }
+
+    public Player getWinner() throws GameNotEndedException {
+        if(this.winner == null) {
+            throw new GameNotEndedException();
+        }
+        return this.winner;
+    }
+
+    public GameStatus getGameStatus() {
+        return this.gameStatus;
     }
 
     public static class Builder {
@@ -84,11 +119,13 @@ public class Game {
 
             return count <= 1;
         }
-        public Game build() throws MultipleBotsException {
+        public Game build() throws MultipleBotsException, EmptyGameWinningStrategiesException {
             if (!checkIfSingleBotMax()) {
                 throw new MultipleBotsException();
             }
-
+            if(gameWinningStrategies.size() == 0) {
+                throw  new EmptyGameWinningStrategiesException();
+            }
             return new Game(this.players, this.board, this.gameWinningStrategies);
         }
     }

@@ -9,4 +9,8 @@ public class Bot extends Player {
         super(PlayerType.BOT, symbol);
         this.botPlayingStrategy = strategy;
     }
+
+    public BotPlayingStrategy getBotPlayingStrategy() {
+        return botPlayingStrategy;
+    }
 }
