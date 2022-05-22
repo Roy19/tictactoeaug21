@@ -10,7 +10,7 @@ public class Board {
         this.dimension = dimension;
     }
 
-    Cell getCell(int i, int j) {
+    public Cell getCell(int i, int j) {
         return board.get(i).get(j);
     }
 }

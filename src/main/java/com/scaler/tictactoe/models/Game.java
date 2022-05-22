@@ -16,6 +16,15 @@ public class Game {
     private GameStatus gameStatus;
     private Player winner;
 
+    private Game(List<Player> players, Board board,
+                 List<GameWinningStrategy> gameWinningStrategies) {
+        this.players = players;
+        this.board = board;
+        this.gameWinningStrategies = gameWinningStrategies;
+        this.moves = new ArrayList<>();
+        this.lastMovedPlayerIndex = -1;
+    }
+
     public static Builder create() {
         return new Builder();
     }
@@ -42,43 +51,20 @@ public class Game {
     public static class Builder {
         private List<Player> players;
         private Board board;
-        private List<Move> moves;
         private List<GameWinningStrategy> gameWinningStrategies;
-        private int lastMovedPlayerIndex;
-        private GameStatus gameStatus;
-        private Player winner;
 
-        Builder() {
+        public Builder() {
             this.players = new ArrayList<>();
             this.gameWinningStrategies = new ArrayList<>();
         }
 
-//        public Builder setPlayers(List<Player> players) {
-//            this.players = players;
-//        }
-
-        public Builder addPlayer(Player player) {
-            this.players.add(player);
-            return this;
-        }
-
         public Builder addPlayers(List<Player> players) {
             this.players.addAll(players);
-
             return this;
         }
 
         public Builder withBoard(Board board) {
             this.board = board;
-            return this;
-        }
-
-//        public Builder setGameWinningStrategies(List<GameWinningStrategy> gameWinningStrategies) {
-//            this.gameWinningStrategies = gameWinningStrategies;
-//        }
-
-        public Builder addGameWinningStrategy(GameWinningStrategy strategy) {
-            this.gameWinningStrategies.add(strategy);
             return this;
         }
 
@@ -103,7 +89,7 @@ public class Game {
                 throw new MultipleBotsException();
             }
 
-            return null;
+            return new Game(this.players, this.board, this.gameWinningStrategies);
         }
     }
 }

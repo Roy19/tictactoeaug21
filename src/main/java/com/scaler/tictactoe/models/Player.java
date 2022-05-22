@@ -4,7 +4,7 @@ public abstract class Player {
     private Symbol symbol;
     private PlayerType playerType;
 
-    Player(PlayerType type, Symbol symbol) {
+    public Player(PlayerType type, Symbol symbol) {
         this.playerType = type;
         this.symbol = symbol;
     }
